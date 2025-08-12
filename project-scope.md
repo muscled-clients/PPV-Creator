@@ -60,9 +60,11 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 
 ### Phase 3: Payments & Analytics (Week 4)
 ✅ **Payment Processing**
-- Stripe Connect integration
+- Stripe Connect integration for ACH payments
+- PayPal integration for instant payouts
+- Cryptocurrency payments (USDC on Ethereum)
 - Escrow system for secure payments
-- Multiple payout methods (ACH, PayPal)
+- Multiple payout methods (ACH, PayPal, Crypto)
 - Minimum payout threshold ($50)
 - Payment history tracking
 
@@ -127,25 +129,31 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 ## Technical Scope
 
 ### Included Technologies
-✅ **Backend**
-- Node.js with Express.js
-- PostgreSQL database
-- Prisma ORM
-- Redis for caching
-- JWT authentication
-- RESTful API design
+✅ **Full-Stack Framework**
+- Next.js 14 with App Router
+- TypeScript for type safety
+- Server Components & Server Actions
+- API Routes for backend logic
+
+✅ **Database & Backend**
+- Supabase (PostgreSQL)
+- Supabase Auth for authentication
+- Supabase Realtime for live updates
+- Supabase Edge Functions
+- Row Level Security (RLS)
 
 ✅ **Frontend**
 - React 18 with TypeScript
 - Tailwind CSS for styling
-- Redux Toolkit for state management
-- Vite build tool
-- Responsive web design
+- Radix UI for components
+- React Query for data fetching
+- React Hook Form for forms
 
 ✅ **Infrastructure**
-- Docker containerization
+- Vercel for deployment
 - GitHub for version control
-- CI/CD pipeline setup
+- CI/CD with GitHub Actions
+- Supabase cloud hosting
 - Development and staging environments
 
 ### Excluded Technologies
@@ -153,8 +161,9 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 ❌ GraphQL API
 ❌ Kubernetes orchestration
 ❌ Native mobile development
-❌ Blockchain integration
+❌ Blockchain integration (except for crypto payments)
 ❌ Machine learning models
+❌ Separate backend API (using Next.js API routes instead)
 
 ## Functional Requirements
 
@@ -218,9 +227,10 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 ### Technical Constraints
 - Limited to web platform (no native apps)
 - Instagram/TikTok API rate limits
-- Stripe payment processing fees
-- PostgreSQL database limits
-- Server hosting specifications
+- Payment processing fees (Stripe, PayPal, Ethereum gas)
+- Supabase tier limits (free tier: 500MB database, 1GB storage)
+- Vercel hosting specifications
+- Next.js serverless function timeouts
 
 ### Business Constraints
 - 5-week development timeline
@@ -340,18 +350,20 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 - Deployment setup: 20 hours
 
 ### Operational Costs (Monthly)
-- Server hosting: $100-500
-- Database hosting: $50-200
-- Redis cache: $30-100
-- Email service: $50-200
-- Domain & SSL: $20
-- Monitoring tools: $50-100
+- Vercel hosting: $20-150
+- Supabase: $25-200
+- Email service (SendGrid): $50-200
+- Domain: $15
+- Monitoring (PostHog): $0-50
+- Total: ~$110-615/month
 
 ### Third-Party Services
-- Stripe fees: 2.9% + $0.30 per transaction
+- Stripe fees (ACH): 0.8% (capped at $5)
+- PayPal fees: 2.9% + $0.30 per transaction
+- Ethereum gas fees: Variable (~$5-50 per crypto transaction)
 - SendGrid: $20-100/month
-- CloudFlare CDN: $20-200/month
-- Sentry monitoring: $26/month
+- Vercel CDN: Included
+- PostHog analytics: Free tier available
 
 ## Change Management
 
@@ -390,10 +402,12 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 ### External Dependencies
 - Instagram Basic Display API
 - TikTok for Developers API
-- Stripe payment gateway
+- Stripe payment gateway (ACH)
+- PayPal SDK
+- Ethereum blockchain (USDC)
 - SendGrid email service
-- PostgreSQL database
-- Redis cache service
+- Supabase platform
+- Vercel hosting
 
 ### Internal Dependencies
 - Completed UI/UX designs

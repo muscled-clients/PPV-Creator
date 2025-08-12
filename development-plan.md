@@ -175,10 +175,9 @@ Following Whop's successful marketplace approach where creators monetize their i
 ### 5. Payment Processing
 - **Escrow System**: Funds held until content approved
 - **Multiple Payout Methods**:
-  - Direct deposit (ACH)
-  - PayPal
-  - Stripe Connect
-  - Crypto (USDC)
+  - ACH (via Stripe) - Bank transfers
+  - PayPal - Instant payouts
+  - Crypto (USDC on Ethereum) - Decentralized payments
 - **Automated Invoicing**: Generate for tax purposes
 - **Minimum Payout**: $50 threshold
 
@@ -237,52 +236,50 @@ campaign_analytics (
 
 ## Tech Stack Implementation
 
-### Backend Architecture
+### Full-Stack Architecture
 ```javascript
-// Node.js + Express + TypeScript
-- RESTful API with versioning (/api/v1/)
-- JWT authentication with refresh tokens
-- Role-based middleware (influencer/brand/admin)
-- Rate limiting per endpoint
-- Request validation (Joi/Zod)
+// Next.js 14 + TypeScript
+- App Router for file-based routing
+- Server Components for better performance
+- Server Actions for mutations
+- API Routes for complex backend logic
+- Middleware for auth protection
 
-// Database
-- PostgreSQL with Prisma ORM
-- Redis for caching and sessions
-- Bull queues for background jobs
+// Database & Backend (Supabase)
+- PostgreSQL database
+- Row Level Security (RLS)
+- Realtime subscriptions
+- Edge Functions for serverless compute
+- Built-in Auth with JWT
 
 // External Services
 - Instagram Basic Display API
 - TikTok for Developers API
-- Stripe Connect for payments
+- Stripe for ACH payments
+- PayPal SDK for instant payouts
+- Ethers.js for crypto payments (USDC)
 - SendGrid for emails
-- AWS S3 for media storage
 ```
 
-### Frontend Architecture
+### Frontend Stack
 ```javascript
-// React 18 + TypeScript
-- Vite for fast builds
-- React Router v6 for navigation
-- Redux Toolkit for state management
-- RTK Query for API calls
-- React Hook Form for forms
-
 // UI/UX
 - Tailwind CSS for styling
-- Headless UI for components
+- Radix UI for accessible components
 - Framer Motion for animations
 - Recharts for analytics
-- React Table for data grids
+- React Hook Form + Zod for forms
+- React Query for data fetching
+- React Hot Toast for notifications
 ```
 
 ### DevOps & Monitoring
-- Docker containers
+- Vercel for deployment (Next.js optimized)
 - GitHub Actions CI/CD
-- Vercel/Netlify for frontend
-- Railway/Render for backend
-- Sentry for error tracking
+- Supabase cloud hosting
 - PostHog for analytics
+- Automatic preview deployments
+- Edge runtime for better performance
 
 ## Whop-Inspired Features
 
