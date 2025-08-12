@@ -261,9 +261,9 @@ CREATE TABLE influencer_profiles (
   bio TEXT,
   reputation_score DECIMAL(3,2) DEFAULT 0,
   verified BOOLEAN DEFAULT FALSE,
-  wallet_address TEXT, -- For crypto payments
   paypal_email TEXT,
-  ach_details JSONB,
+  stripe_customer_id TEXT,
+  stripe_account_id TEXT, -- For ACH payouts
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -324,10 +324,11 @@ CREATE TABLE transactions (
   campaign_id UUID REFERENCES campaigns(id),
   influencer_id UUID REFERENCES auth.users(id),
   amount DECIMAL(10,2),
-  payment_method TEXT CHECK (payment_method IN ('ach', 'paypal', 'crypto')),
+  payment_method TEXT CHECK (payment_method IN ('ach', 'paypal')),
   payment_details JSONB,
   status TEXT DEFAULT 'pending',
-  transaction_hash TEXT, -- For crypto transactions
+  stripe_payment_intent_id TEXT,
+  paypal_transaction_id TEXT,
   processed_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -364,10 +365,7 @@ STRIPE_WEBHOOK_SECRET=your-webhook-secret
 PAYPAL_CLIENT_ID=your-paypal-client-id
 PAYPAL_CLIENT_SECRET=your-paypal-client-secret
 
-# Crypto Payments (Blockchain requirement)
-CRYPTO_WALLET_PRIVATE_KEY=your-wallet-private-key
-ETHEREUM_RPC_URL=https://mainnet.infura.io/v3/your-key
-USDC_CONTRACT_ADDRESS=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48
+# Note: Crypto payments deferred to Phase 2 (not in MVP)
 ```
 
 ## Package Dependencies
@@ -397,7 +395,6 @@ USDC_CONTRACT_ADDRESS=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48
     "@supabase/realtime-js": "^2.9.0",
     "stripe": "^14.10.0",
     "@paypal/checkout-server-sdk": "^1.0.3",
-    "ethers": "^6.9.0",
     "@tanstack/react-query": "^5.14.0",
     "@hookform/resolvers": "^3.3.2",
     "react-hook-form": "^7.48.2",
@@ -468,7 +465,7 @@ enabled = true
 ```
 supabase/functions/
 ├── process-payout/
-│   └── index.ts          # Process ACH/PayPal/Crypto payouts
+│   └── index.ts          # Process ACH/PayPal payouts
 ├── verify-instagram/
 │   └── index.ts          # Verify Instagram account
 ├── verify-tiktok/
@@ -476,11 +473,11 @@ supabase/functions/
 ├── calculate-metrics/
 │   └── index.ts          # Calculate campaign metrics
 ├── send-email/
-│   └── index.ts          # Send emails via Resend/SMTP
-├── webhook-handler/
-│   └── index.ts          # Handle payment webhooks
-├── realtime-notifications/
-│   └── index.ts          # Push realtime updates
+│   └── index.ts          # Send transactional emails
+├── stripe-webhook/
+│   └── index.ts          # Handle Stripe webhooks
+├── paypal-webhook/
+│   └── index.ts          # Handle PayPal webhooks
 └── scheduled-tasks/
     └── index.ts          # Cron jobs for metrics updates
 ```
@@ -584,10 +581,10 @@ npm run test:e2e       # Run E2E tests
 - **Payments**: `/app/api/payments/`, `/lib/actions/payment.actions.ts`
 - **Analytics**: `/app/brand/analytics/`, `/lib/actions/analytics.actions.ts`
 
-### Payment Methods Implementation
-- **ACH Payments**: `/lib/utils/ach-processor.ts`
-- **PayPal**: `/lib/utils/paypal-client.ts`
-- **Crypto (USDC)**: `/lib/utils/crypto-payments.ts`
+### Payment Integration
+- **Stripe ACH**: Server actions with Stripe SDK
+- **PayPal**: Edge functions for PayPal processing
+- **Transaction Records**: Stored in Supabase database
 
 ## Security Implementation
 

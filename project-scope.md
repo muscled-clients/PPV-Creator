@@ -62,11 +62,11 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 ✅ **Payment Processing**
 - Stripe Connect integration for ACH payments
 - PayPal integration for instant payouts
-- Cryptocurrency payments (USDC on Ethereum)
 - Escrow system for secure payments
-- Multiple payout methods (ACH, PayPal, Crypto)
+- Multiple payout methods (ACH, PayPal)
 - Minimum payout threshold ($50)
-- Payment history tracking
+- Payment history tracking in Supabase
+- Transaction logging and audit trail
 
 ✅ **Analytics Dashboard (Supabase Views & Functions)**
 - Supabase database views for metrics
@@ -120,8 +120,8 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 ❌ **Additional Features**
 - In-app video/image editing
 - Content creation tools
-- Influencer marketplace chat/messaging
-- Cryptocurrency payments
+- Direct messaging between users
+- Cryptocurrency payments (deferred to Phase 2)
 - Mobile native apps (iOS/Android)
 - Affiliate link tracking
 - A/B testing for campaigns
@@ -362,10 +362,9 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 ### Third-Party Services
 - Stripe fees (ACH): 0.8% (capped at $5)
 - PayPal fees: 2.9% + $0.30 per transaction
-- Ethereum gas fees: Variable (~$5-50 per crypto transaction)
-- SendGrid: $20-100/month
-- Vercel CDN: Included
-- PostHog analytics: Free tier available
+- Supabase Email: Built-in for auth emails
+- Vercel CDN: Included with deployment
+- Analytics: Vercel Analytics + Supabase metrics
 
 ## Change Management
 
@@ -406,10 +405,8 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 - TikTok for Developers API
 - Stripe payment gateway (ACH)
 - PayPal SDK
-- Ethereum blockchain (USDC)
-- SendGrid email service
-- Supabase platform
-- Vercel hosting
+- Supabase platform (primary backend)
+- Vercel hosting (Next.js deployment)
 
 ### Internal Dependencies
 - Completed UI/UX designs

@@ -177,62 +177,21 @@ Following Whop's successful marketplace approach where creators monetize their i
 - **Multiple Payout Methods**:
   - ACH (via Stripe) - Bank transfers
   - PayPal - Instant payouts
-  - Crypto (USDC on Ethereum) - Decentralized payments
-- **Automated Invoicing**: Generate for tax purposes
+- **Payment History**: Tracked in Supabase database
 - **Minimum Payout**: $50 threshold
 
 ## Database Architecture
 
-### Primary Tables
-```sql
--- Core user and profile data
-users (id, email, password_hash, role, created_at)
-influencer_profiles (
-  user_id, 
-  instagram_handle, instagram_followers, instagram_engagement,
-  tiktok_handle, tiktok_followers, tiktok_engagement,
-  niche, bio, reputation_score, verified
-)
+*See `supabase-architecture.md` for complete database schema and implementation details.*
 
--- Campaign management
-campaigns (
-  id, brand_id, title, description, 
-  platforms[], budget, slots_available,
-  min_ig_followers, min_tiktok_followers,
-  min_engagement_rate, niche,
-  hashtags[], mentions[],
-  start_date, end_date, status
-)
-
--- Application and submission flow
-campaign_applications (
-  id, campaign_id, influencer_id,
-  proposed_rate, cover_letter,
-  status, applied_at, reviewed_at
-)
-
-campaign_submissions (
-  id, campaign_id, influencer_id,
-  platform, post_url, 
-  caption, posted_at,
-  status, review_notes,
-  engagement_metrics
-)
-
--- Financial tracking
-transactions (
-  id, campaign_id, influencer_id,
-  amount, status, 
-  payment_method, processed_at
-)
-
--- Analytics
-campaign_analytics (
-  campaign_id, total_reach, total_engagement,
-  instagram_metrics, tiktok_metrics,
-  roi_percentage, updated_at
-)
-```
+### Core Tables
+- **users**: Managed by Supabase Auth
+- **influencer_profiles**: Extended user data with social metrics
+- **campaigns**: Brand marketing initiatives
+- **campaign_applications**: Influencer applications to campaigns
+- **submissions**: Content submission tracking
+- **transactions**: Payment records
+- **notifications**: In-app notification queue
 
 ## Tech Stack Implementation
 
@@ -257,7 +216,6 @@ campaign_analytics (
 - TikTok for Developers API (social verification)
 - Stripe for ACH payments (specialized payment processing)
 - PayPal SDK for instant payouts (specialized payment processing)
-- Ethers.js for crypto payments (blockchain integration)
 ```
 
 ### Frontend Stack
@@ -316,39 +274,39 @@ Similar to Whop's product discovery:
 ## Development Roadmap
 
 ### Week 1: Foundation
-- Set up project structure
-- Implement authentication system
-- Create user roles and permissions
-- Design database schema
-- Build basic API endpoints
+- Set up Next.js project with TypeScript
+- Configure Supabase project and auth
+- Create database schema with RLS
+- Implement user registration/login
+- Basic role-based routing
 
-### Week 2: Campaign Core
+### Week 2: Campaign System
 - Campaign CRUD operations
-- Application system
-- Instagram API integration
-- TikTok API integration
-- Profile verification flow
-
-### Week 3: Marketplace Features
-- Campaign discovery page
-- Advanced filtering/sorting
+- Campaign discovery and filtering
 - Application workflow
+- Basic admin panel
+- Supabase Realtime setup
+
+### Week 3: Submissions & Review
 - Content submission system
-- Admin review interface
+- Link validation
+- Review workflow
+- Status tracking
+- Notification system setup
 
 ### Week 4: Payments & Analytics
-- Stripe Connect integration
-- Payout processing
-- Analytics dashboard
-- Performance tracking
-- Notification system
+- Stripe ACH integration
+- PayPal integration
+- Payment processing workflow
+- Basic analytics dashboard
+- Transaction tracking
 
-### Week 5: Polish & Launch
-- Mobile optimization
-- Performance testing
-- Security audit
-- Beta testing
-- Production deployment
+### Week 5: Testing & Deployment
+- Comprehensive testing
+- Bug fixes and optimization
+- Mobile responsiveness
+- Vercel deployment setup
+- Production launch preparation
 
 ## Security & Compliance
 
@@ -390,7 +348,7 @@ Similar to Whop's product discovery:
 
 1. **Specialized Focus**: Instagram & TikTok only (not general creator platform)
 2. **Lower Fees**: 10% platform fee vs Whop's higher rates
-3. **Better Matching**: AI-powered influencer-campaign matching
+3. **Better Matching**: Smart matching algorithm for campaigns
 4. **Faster Payouts**: 24-hour processing vs weekly
 5. **Transparent Pricing**: No hidden fees or premium tiers
 
