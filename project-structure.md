@@ -191,32 +191,40 @@ shared/
 supabase/
 ├── client.ts              # Supabase client setup
 ├── server.ts              # Server-side client
-├── middleware.ts          # Auth middleware
-├── types.ts               # Database types
+├── middleware.ts          # Auth middleware using Supabase Auth
+├── types.ts               # Database types from Supabase
+├── realtime.ts            # Realtime subscriptions setup
+├── storage.ts             # Supabase Storage for files
 └── queries/               # Database queries
     ├── users.ts
     ├── campaigns.ts
     ├── submissions.ts
-    └── payments.ts
+    ├── payments.ts
+    ├── notifications.ts   # Notification queries
+    └── analytics.ts       # Analytics views
 ```
 
 ### `/lib/actions/`
 ```
 actions/
-├── auth.actions.ts        # Authentication actions
-├── campaign.actions.ts    # Campaign CRUD
-├── submission.actions.ts  # Content submission
-├── payment.actions.ts     # Payment processing
-└── analytics.actions.ts   # Analytics data
+├── auth.actions.ts        # Supabase Auth actions
+├── campaign.actions.ts    # Campaign CRUD via Supabase
+├── submission.actions.ts  # Content submission to Supabase
+├── payment.actions.ts     # Payment processing (external + Supabase logs)
+├── analytics.actions.ts   # Analytics from Supabase views
+├── notification.actions.ts # Supabase realtime notifications
+└── storage.actions.ts     # Supabase Storage operations
 ```
 
 ### `/lib/hooks/`
 ```
 hooks/
-├── use-auth.ts           # Authentication hook
-├── use-campaigns.ts      # Campaigns data
-├── use-supabase.ts      # Supabase client
-├── use-realtime.ts      # Real-time subscriptions
+├── use-auth.ts           # Supabase Auth hook
+├── use-campaigns.ts      # Campaigns data from Supabase
+├── use-supabase.ts      # Supabase client hook
+├── use-realtime.ts      # Supabase Realtime subscriptions
+├── use-notifications.ts # Supabase realtime notifications
+├── use-storage.ts       # Supabase Storage hook
 ├── use-toast.ts         # Toast notifications
 └── use-debounce.ts      # Debounce hook
 ```
@@ -336,41 +344,30 @@ ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
 
 ### `.env.local`
 ```env
-# Supabase
+# Supabase (Primary Backend Service)
 NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
-# Authentication
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your-nextauth-secret
+# Next.js
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 
-# Instagram API
+# Social Media APIs (Only for verification)
 INSTAGRAM_CLIENT_ID=your-instagram-client-id
 INSTAGRAM_CLIENT_SECRET=your-instagram-client-secret
-
-# TikTok API
 TIKTOK_CLIENT_KEY=your-tiktok-client-key
 TIKTOK_CLIENT_SECRET=your-tiktok-client-secret
 
-# Payment Processing
+# Payment Processing (External requirement)
 STRIPE_SECRET_KEY=your-stripe-secret-key
 STRIPE_WEBHOOK_SECRET=your-webhook-secret
 PAYPAL_CLIENT_ID=your-paypal-client-id
 PAYPAL_CLIENT_SECRET=your-paypal-client-secret
 
-# Crypto Payments
+# Crypto Payments (Blockchain requirement)
 CRYPTO_WALLET_PRIVATE_KEY=your-wallet-private-key
 ETHEREUM_RPC_URL=https://mainnet.infura.io/v3/your-key
 USDC_CONTRACT_ADDRESS=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48
-
-# Email
-SENDGRID_API_KEY=your-sendgrid-api-key
-SENDGRID_FROM_EMAIL=noreply@platform.com
-
-# Analytics
-NEXT_PUBLIC_POSTHOG_KEY=your-posthog-key
-NEXT_PUBLIC_POSTHOG_HOST=https://app.posthog.com
 ```
 
 ## Package Dependencies
@@ -397,6 +394,7 @@ NEXT_PUBLIC_POSTHOG_HOST=https://app.posthog.com
     "@supabase/supabase-js": "^2.39.0",
     "@supabase/auth-helpers-nextjs": "^0.8.7",
     "@supabase/auth-helpers-react": "^0.4.2",
+    "@supabase/realtime-js": "^2.9.0",
     "stripe": "^14.10.0",
     "@paypal/checkout-server-sdk": "^1.0.3",
     "ethers": "^6.9.0",
@@ -415,8 +413,7 @@ NEXT_PUBLIC_POSTHOG_HOST=https://app.posthog.com
     "recharts": "^2.10.3",
     "date-fns": "^3.0.6",
     "react-hot-toast": "^2.4.1",
-    "@sendgrid/mail": "^8.1.0",
-    "posthog-js": "^1.96.1"
+    "resend": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.5",
@@ -478,8 +475,14 @@ supabase/functions/
 │   └── index.ts          # Verify TikTok account
 ├── calculate-metrics/
 │   └── index.ts          # Calculate campaign metrics
-└── send-notification/
-    └── index.ts          # Send email notifications
+├── send-email/
+│   └── index.ts          # Send emails via Resend/SMTP
+├── webhook-handler/
+│   └── index.ts          # Handle payment webhooks
+├── realtime-notifications/
+│   └── index.ts          # Push realtime updates
+└── scheduled-tasks/
+    └── index.ts          # Cron jobs for metrics updates
 ```
 
 ## Deployment Configuration

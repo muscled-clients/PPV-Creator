@@ -150,15 +150,15 @@ Following Whop's successful marketplace approach where creators monetize their i
 
 ### 2. Instagram Integration
 - **Profile Verification**: Connect via Instagram Basic Display API
-- **Metrics Tracking**: Followers, engagement rate, reach
-- **Content Validation**: Verify post exists and contains required elements
-- **Story Support**: Track story posts with link stickers
+- **Metrics Storage**: Store in Supabase database
+- **Validation Logic**: Supabase Edge Functions for verification
+- **Data Caching**: Supabase for storing verified metrics
 
 ### 3. TikTok Integration  
 - **Account Verification**: TikTok Login Kit
-- **Analytics Access**: Views, likes, shares, comments
-- **Hashtag Tracking**: Verify campaign hashtags
-- **Video Performance**: Track viral potential
+- **Metrics Storage**: Store in Supabase database
+- **Performance Tracking**: Supabase scheduled functions
+- **Data Analytics**: Supabase views and aggregations
 
 ### 4. Reputation System (Like Whop's Ratings)
 - **Influencer Score**: 
@@ -252,13 +252,12 @@ campaign_analytics (
 - Edge Functions for serverless compute
 - Built-in Auth with JWT
 
-// External Services
-- Instagram Basic Display API
-- TikTok for Developers API
-- Stripe for ACH payments
-- PayPal SDK for instant payouts
-- Ethers.js for crypto payments (USDC)
-- SendGrid for emails
+// External Services (Only when Supabase can't handle)
+- Instagram Basic Display API (social verification)
+- TikTok for Developers API (social verification)
+- Stripe for ACH payments (specialized payment processing)
+- PayPal SDK for instant payouts (specialized payment processing)
+- Ethers.js for crypto payments (blockchain integration)
 ```
 
 ### Frontend Stack
@@ -291,10 +290,10 @@ Similar to Whop's product discovery:
 - Quick apply with one click
 
 ### 2. Instant Notifications
-- Push notifications for new campaigns
-- Email alerts for application updates  
-- In-app notifications for payments
-- SMS for urgent deadlines
+- Supabase Realtime for in-app notifications
+- Supabase Edge Functions for email triggers
+- Database-driven notification queue
+- WebSocket connections for live updates
 
 ### 3. Mobile-First Design
 - Progressive Web App (PWA)

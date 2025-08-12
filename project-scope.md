@@ -23,19 +23,19 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 ## In-Scope Features
 
 ### Phase 1: Core Platform (Weeks 1-2)
-✅ **User Management**
-- User registration with role selection (Influencer/Brand)
-- JWT-based authentication system
-- Password reset functionality
-- Profile management for both roles
-- Email verification
+✅ **User Management (Powered by Supabase Auth)**
+- User registration with role selection via Supabase Auth
+- Built-in JWT authentication with Supabase
+- Password reset using Supabase Auth
+- Profile data stored in Supabase database
+- Email verification via Supabase Auth
 
-✅ **Campaign Management**
-- Campaign creation with detailed requirements
-- Campaign listing and discovery
-- Filter campaigns by platform, niche, budget
-- Campaign status management (draft, active, closed)
-- Campaign editing and deletion
+✅ **Campaign Management (Supabase Database)**
+- Campaign CRUD operations via Supabase
+- Real-time campaign updates with Supabase Realtime
+- Database-driven filters and search
+- Row Level Security for campaign access
+- Optimistic updates with Supabase
 
 ✅ **Application System**
 - Apply to campaigns with cover letter
@@ -68,19 +68,19 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 - Minimum payout threshold ($50)
 - Payment history tracking
 
-✅ **Analytics Dashboard**
-- Campaign performance metrics
-- ROI calculations
-- Influencer performance scores
-- Platform comparison (IG vs TikTok)
-- Export reports (CSV format)
+✅ **Analytics Dashboard (Supabase Views & Functions)**
+- Supabase database views for metrics
+- Aggregated data via Supabase functions
+- Real-time analytics with Supabase subscriptions
+- Platform comparison using SQL views
+- CSV export via Supabase Edge Functions
 
 ### Phase 4: Advanced Features (Week 5)
-✅ **Notifications**
-- Email notifications for key events
-- In-app notification center
-- Campaign deadline reminders
-- Payment confirmations
+✅ **Notifications (Supabase Realtime & Edge Functions)**
+- Supabase Realtime for instant in-app notifications
+- Database-triggered email via Edge Functions
+- Notification queue in Supabase tables
+- WebSocket connections for live updates
 
 ✅ **Reputation System**
 - Influencer rating system
@@ -129,18 +129,20 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 ## Technical Scope
 
 ### Included Technologies
-✅ **Full-Stack Framework**
+✅ **Frontend Framework**
 - Next.js 14 with App Router
 - TypeScript for type safety
-- Server Components & Server Actions
-- API Routes for backend logic
+- Server Components for performance
+- Server Actions for Supabase mutations
 
-✅ **Database & Backend**
-- Supabase (PostgreSQL)
-- Supabase Auth for authentication
-- Supabase Realtime for live updates
-- Supabase Edge Functions
-- Row Level Security (RLS)
+✅ **Backend Services (Primarily Supabase)**
+- Supabase PostgreSQL database
+- Supabase Auth for complete authentication
+- Supabase Realtime for all live features
+- Supabase Edge Functions for serverless logic
+- Supabase Storage for file uploads
+- Row Level Security for data protection
+- Supabase Webhooks for event handling
 
 ✅ **Frontend**
 - React 18 with TypeScript
