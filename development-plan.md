@@ -175,10 +175,11 @@ Following Whop's successful marketplace approach where creators monetize their i
 ### 5. Payment Processing
 - **Escrow System**: Funds held until content approved
 - **Multiple Payout Methods**:
-  - ACH (via Stripe) - Bank transfers
+  - ACH (via Plaid/Dwolla) - Bank transfers
   - PayPal - Instant payouts
+  - Crypto (BTC, ETH, USDC) - Digital currency payouts
 - **Payment History**: Tracked in Supabase database
-- **Minimum Payout**: $50 threshold
+- **Minimum Payout**: $50 threshold (except crypto)
 
 ## Database Architecture
 
@@ -214,8 +215,9 @@ Following Whop's successful marketplace approach where creators monetize their i
 // External Services (Only when Supabase can't handle)
 - Instagram Basic Display API (social verification)
 - TikTok for Developers API (social verification)
-- Stripe for ACH payments (specialized payment processing)
+- Plaid/Dwolla for ACH payments (bank transfers)
 - PayPal SDK for instant payouts (specialized payment processing)
+- Coinbase Commerce for crypto payments (BTC, ETH, USDC)
 ```
 
 ### Frontend Stack
@@ -295,8 +297,9 @@ Similar to Whop's product discovery:
 - Notification system setup
 
 ### Week 4: Payments & Analytics
-- Stripe ACH integration
+- ACH payment setup (Plaid/Dwolla)
 - PayPal integration
+- Crypto payment integration
 - Payment processing workflow
 - Basic analytics dashboard
 - Transaction tracking

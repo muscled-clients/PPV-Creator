@@ -138,7 +138,7 @@ api/
 │   ├── history/route.ts   # Payment history
 │   └── balance/route.ts   # Current balance
 └── webhooks/
-    ├── stripe/route.ts    # Stripe webhooks
+    ├── ach/route.ts       # ACH webhook handlers
     └── paypal/route.ts    # PayPal webhooks
 ```
 
@@ -262,8 +262,8 @@ CREATE TABLE influencer_profiles (
   reputation_score DECIMAL(3,2) DEFAULT 0,
   verified BOOLEAN DEFAULT FALSE,
   paypal_email TEXT,
-  stripe_customer_id TEXT,
-  stripe_account_id TEXT, -- For ACH payouts
+  ach_account_id TEXT,      -- For ACH payouts
+  crypto_wallet_address TEXT, -- For crypto payouts
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -327,7 +327,8 @@ CREATE TABLE transactions (
   payment_method TEXT CHECK (payment_method IN ('ach', 'paypal')),
   payment_details JSONB,
   status TEXT DEFAULT 'pending',
-  stripe_payment_intent_id TEXT,
+  ach_transaction_id TEXT,
+  crypto_transaction_hash TEXT,
   paypal_transaction_id TEXT,
   processed_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW()
@@ -360,8 +361,11 @@ TIKTOK_CLIENT_KEY=your-tiktok-client-key
 TIKTOK_CLIENT_SECRET=your-tiktok-client-secret
 
 # Payment Processing (External requirement)
-STRIPE_SECRET_KEY=your-stripe-secret-key
-STRIPE_WEBHOOK_SECRET=your-webhook-secret
+# ACH Payments (Plaid/Dwolla)
+PLAID_CLIENT_ID=your-plaid-client-id
+PLAID_SECRET=your-plaid-secret
+DWOLLA_KEY=your-dwolla-key
+DWOLLA_SECRET=your-dwolla-secret
 PAYPAL_CLIENT_ID=your-paypal-client-id
 PAYPAL_CLIENT_SECRET=your-paypal-client-secret
 
@@ -393,7 +397,9 @@ PAYPAL_CLIENT_SECRET=your-paypal-client-secret
     "@supabase/auth-helpers-nextjs": "^0.8.7",
     "@supabase/auth-helpers-react": "^0.4.2",
     "@supabase/realtime-js": "^2.9.0",
-    "stripe": "^14.10.0",
+    "plaid": "^23.0.0",
+    "dwolla-v2": "^3.4.0",
+    "coinbase-commerce-node": "^1.0.4",
     "@paypal/checkout-server-sdk": "^1.0.3",
     "@tanstack/react-query": "^5.14.0",
     "@hookform/resolvers": "^3.3.2",
@@ -474,8 +480,8 @@ supabase/functions/
 │   └── index.ts          # Calculate campaign metrics
 ├── send-email/
 │   └── index.ts          # Send transactional emails
-├── stripe-webhook/
-│   └── index.ts          # Handle Stripe webhooks
+├── ach-webhook/
+│   └── index.ts          # Handle ACH webhooks
 ├── paypal-webhook/
 │   └── index.ts          # Handle PayPal webhooks
 └── scheduled-tasks/
@@ -510,7 +516,7 @@ module.exports = nextConfig
 ```json
 {
   "functions": {
-    "app/api/webhooks/stripe/route.ts": {
+    "app/api/webhooks/ach/route.ts": {
       "maxDuration": 30
     },
     "app/api/payments/payout/route.ts": {
@@ -582,7 +588,8 @@ npm run test:e2e       # Run E2E tests
 - **Analytics**: `/app/brand/analytics/`, `/lib/actions/analytics.actions.ts`
 
 ### Payment Integration
-- **Stripe ACH**: Server actions with Stripe SDK
+- **ACH Payments**: Plaid for bank linking, Dwolla for transfers
+- **Crypto Payments**: Coinbase Commerce for BTC/ETH/USDC
 - **PayPal**: Edge functions for PayPal processing
 - **Transaction Records**: Stored in Supabase database
 

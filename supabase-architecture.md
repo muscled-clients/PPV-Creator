@@ -219,9 +219,9 @@ export async function middleware(req: Request) {
 **Why External:** Regulatory compliance, specialized infrastructure
 
 **Services:**
-- Stripe (ACH payments)
+- Plaid/Dwolla (ACH payments)
 - PayPal (Instant payouts)
-- Ethers.js (Crypto/USDC)
+- Coinbase Commerce (BTC, ETH, USDC)
 
 **Integration:**
 - Process payments externally

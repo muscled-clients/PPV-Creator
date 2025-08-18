@@ -60,7 +60,8 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 
 ### Phase 3: Payments & Analytics (Week 4)
 ✅ **Payment Processing**
-- Stripe Connect integration for ACH payments
+- ACH payment integration (Plaid/Dwolla)
+- Crypto payment integration (BTC, ETH, USDC)
 - PayPal integration for instant payouts
 - Escrow system for secure payments
 - Multiple payout methods (ACH, PayPal)
@@ -229,7 +230,7 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 ### Technical Constraints
 - Limited to web platform (no native apps)
 - Instagram/TikTok API rate limits
-- Payment processing fees (Stripe, PayPal, Ethereum gas)
+- Payment processing fees (ACH, PayPal, crypto network fees)
 - Supabase tier limits (free tier: 500MB database, 1GB storage)
 - Vercel hosting specifications
 - Next.js serverless function timeouts
@@ -272,7 +273,8 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 - [ ] Notification system
 
 ### Week 4 Deliverables
-- [ ] Stripe integration
+- [ ] ACH payment integration
+- [ ] Crypto payment setup
 - [ ] Payment processing
 - [ ] Analytics dashboard
 - [ ] Reporting features
@@ -305,7 +307,7 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 
 ### High Risk Items
 1. **Payment Integration Delays**
-   - Mitigation: Early Stripe account setup
+   - Mitigation: Early payment provider account setup
    
 2. **Social Media API Changes**
    - Mitigation: Abstract API layer
@@ -360,7 +362,8 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 - Total: ~$110-615/month
 
 ### Third-Party Services
-- Stripe fees (ACH): 0.8% (capped at $5)
+- ACH fees: 0.5-1% (varies by provider)
+- Crypto network fees: Variable
 - PayPal fees: 2.9% + $0.30 per transaction
 - Supabase Email: Built-in for auth emails
 - Vercel CDN: Included with deployment
@@ -403,7 +406,8 @@ This document defines the scope, boundaries, deliverables, and constraints for t
 ### External Dependencies
 - Instagram Basic Display API
 - TikTok for Developers API
-- Stripe payment gateway (ACH)
+- Plaid/Dwolla for ACH payments
+- Coinbase Commerce for crypto
 - PayPal SDK
 - Supabase platform (primary backend)
 - Vercel hosting (Next.js deployment)
