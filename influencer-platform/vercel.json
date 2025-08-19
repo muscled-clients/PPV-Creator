@@ -75,17 +75,6 @@
           "value": "max-age=31536000; includeSubDomains; preload"
         }
       ]
-    },
-    {
-      "source": "/:path*{/}?",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.ppv-creator.vercel.app"
-        }
-      ],
-      "destination": "https://ppv-creator.vercel.app/:path*",
-      "permanent": true
     }
   ],
   
@@ -104,6 +93,17 @@
     {
       "source": "/home",
       "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/:path*{/}?",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.ppv-creator.vercel.app"
+        }
+      ],
+      "destination": "https://ppv-creator.vercel.app/:path*",
       "permanent": true
     }
   ],
