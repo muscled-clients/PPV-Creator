@@ -165,7 +165,7 @@ export default async function BrandAnalyticsPage() {
   const exportData = {
     campaigns: campaigns || [],
     applications: applications || [],
-    submissions: submissions || [],
+    submissions: [], // TODO: Add submissions data when available
     metrics: {
       totalCampaigns,
       activeCampaigns,

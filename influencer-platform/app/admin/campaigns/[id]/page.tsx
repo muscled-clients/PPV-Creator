@@ -168,7 +168,7 @@ export default function CampaignDetailsPage({ params }: PageProps) {
       // For each application, fetch influencer details
       if (applicationsData && applicationsData.length > 0) {
         const applicationsWithProfiles = await Promise.all(
-          applicationsData.map(async (application) => {
+          applicationsData.map(async (application: any) => {
             // Fetch influencer profile
             const { data: influencerData, error: influencerError } = await supabase
               .from('influencer_profiles')

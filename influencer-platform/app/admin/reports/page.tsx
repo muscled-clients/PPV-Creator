@@ -223,14 +223,14 @@ export default function AdminReportsPage() {
       ])
 
       // Calculate totals
-      const totalRevenue = revenue.data?.reduce((sum, t) => sum + (t.amount || 0), 0) || 0
-      const monthlyRevenue = monthlyRev.data?.reduce((sum, t) => sum + (t.amount || 0), 0) || 0
+      const totalRevenue = revenue.data?.reduce((sum: number, t: any) => sum + (t.amount || 0), 0) || 0
+      const monthlyRevenue = monthlyRev.data?.reduce((sum: number, t: any) => sum + (t.amount || 0), 0) || 0
       const platformFees = totalRevenue * 0.1
       const avgTransactionValue = transactions.count ? totalRevenue / transactions.count : 0
 
       // Calculate categories
       const categoryBreakdown: Record<string, number> = {}
-      campaignCats.data?.forEach(c => {
+      campaignCats.data?.forEach((c: any) => {
         const cat = c.category || 'Uncategorized'
         categoryBreakdown[cat] = (categoryBreakdown[cat] || 0) + 1
       })
@@ -278,7 +278,7 @@ export default function AdminReportsPage() {
         ])
         
         userGrowthData.push(userCount.count || 0)
-        revenueData.push(transactionData.data?.reduce((sum, t) => sum + (t.amount || 0), 0) || 0)
+        revenueData.push(transactionData.data?.reduce((sum: number, t: any) => sum + (t.amount || 0), 0) || 0)
         campaignData.push(campaignCount.count || 0)
         engagementData.push(applicationData.count || 0)
       }

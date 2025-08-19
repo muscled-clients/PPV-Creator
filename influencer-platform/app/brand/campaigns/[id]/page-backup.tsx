@@ -76,9 +76,9 @@ export default async function CampaignDetailsPage({ params }: CampaignDetailsPag
   }
 
   const applications = campaign.campaign_applications || []
-  const pendingApplications = applications.filter(app => app.status === 'pending')
-  const approvedApplications = applications.filter(app => app.status === 'approved')
-  const rejectedApplications = applications.filter(app => app.status === 'rejected')
+  const pendingApplications = applications.filter((app: any) => app.status === 'pending')
+  const approvedApplications = applications.filter((app: any) => app.status === 'approved')
+  const rejectedApplications = applications.filter((app: any) => app.status === 'rejected')
 
   const isExpired = new Date(campaign.end_date) < new Date()
   const daysLeft = Math.ceil((new Date(campaign.end_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
@@ -196,7 +196,7 @@ export default async function CampaignDetailsPage({ params }: CampaignDetailsPag
 
                   {/* Recent Applications Preview */}
                   <div className="space-y-3">
-                    {applications.slice(0, 3).map((application) => (
+                    {applications.slice(0, 3).map((application: any) => (
                       <div key={application.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
                         <div className="flex items-center space-x-3">
                           <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
@@ -274,7 +274,7 @@ export default async function CampaignDetailsPage({ params }: CampaignDetailsPag
               <div className="bg-white rounded-lg shadow p-6">
                 <h3 className="font-semibold text-gray-900 mb-4">Target Platforms</h3>
                 <div className="space-y-2">
-                  {campaign.platforms.map((platform, index) => (
+                  {campaign.platforms.map((platform: any, index: number) => (
                     <div key={index} className="flex items-center space-x-2">
                       {platform === 'instagram' && <Instagram className="w-4 h-4 text-pink-500" />}
                       {platform === 'tiktok' && <Music className="w-4 h-4 text-black" />}
@@ -290,7 +290,7 @@ export default async function CampaignDetailsPage({ params }: CampaignDetailsPag
               <div className="bg-white rounded-lg shadow p-6">
                 <h3 className="font-semibold text-gray-900 mb-4">Categories</h3>
                 <div className="flex flex-wrap gap-2">
-                  {campaign.categories.map((category, index) => (
+                  {campaign.categories.map((category: any, index: number) => (
                     <Badge key={index} variant="outline" className="capitalize">
                       {category}
                     </Badge>

@@ -38,12 +38,12 @@ export default async function BrandCampaignsPage() {
   const campaigns = result.success ? result.data : []
 
   // Calculate stats
-  const totalCampaigns = campaigns.length
-  const activeCampaigns = campaigns.filter((c: any) => c.status === 'active').length
-  const draftCampaigns = campaigns.filter((c: any) => c.status === 'draft').length
-  const completedCampaigns = campaigns.filter((c: any) => c.status === 'completed').length
-  const totalBudget = campaigns.reduce((sum: number, c: any) => sum + (c.budget_amount || 0), 0)
-  const totalApplications = campaigns.reduce((sum: number, c: any) => sum + (c.campaign_applications?.length || 0), 0)
+  const totalCampaigns = campaigns?.length || 0
+  const activeCampaigns = campaigns?.filter((c: any) => c.status === 'active').length || 0
+  const draftCampaigns = campaigns?.filter((c: any) => c.status === 'draft').length || 0
+  const completedCampaigns = campaigns?.filter((c: any) => c.status === 'completed').length || 0
+  const totalBudget = campaigns?.reduce((sum: number, c: any) => sum + (c.budget_amount || 0), 0) || 0
+  const totalApplications = campaigns?.reduce((sum: number, c: any) => sum + (c.campaign_applications?.length || 0), 0) || 0
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -173,8 +173,8 @@ export default async function BrandCampaignsPage() {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {campaigns
-                    .filter((c: any) => c.status === 'draft')
-                    .map((campaign: any) => (
+                    ?.filter((c: any) => c.status === 'draft')
+                    ?.map((campaign: any) => (
                       <CampaignCardClient key={campaign.id} campaign={campaign} />
                     ))}
                 </div>
@@ -190,8 +190,8 @@ export default async function BrandCampaignsPage() {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {campaigns
-                    .filter((c: any) => c.status === 'active')
-                    .map((campaign: any) => (
+                    ?.filter((c: any) => c.status === 'active')
+                    ?.map((campaign: any) => (
                       <CampaignCardClient key={campaign.id} campaign={campaign} />
                     ))}
                 </div>
@@ -199,15 +199,15 @@ export default async function BrandCampaignsPage() {
             )}
 
             {/* Other Campaigns */}
-            {campaigns.filter((c: any) => !['draft', 'active'].includes(c.status)).length > 0 && (
+            {(campaigns?.filter((c: any) => !['draft', 'active'].includes(c.status)).length || 0) > 0 && (
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">
                   Other Campaigns
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {campaigns
-                    .filter((c: any) => !['draft', 'active'].includes(c.status))
-                    .map((campaign: any) => (
+                    ?.filter((c: any) => !['draft', 'active'].includes(c.status))
+                    ?.map((campaign: any) => (
                       <CampaignCardClient key={campaign.id} campaign={campaign} />
                     ))}
                 </div>

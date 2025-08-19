@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { toast } from 'react-hot-toast'
 import { updateUserProfile } from '@/lib/actions/user-actions'
-import { User, BrandProfile } from '@/lib/types/database'
+// import { User, BrandProfile } from '@/lib/types/database'
+type User = any
+type BrandProfile = any
 import { ArrowLeft, Save, X } from 'lucide-react'
 
 interface ProfileEditWrapperProps {

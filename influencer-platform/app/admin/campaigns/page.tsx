@@ -94,7 +94,7 @@ export default function CampaignReviewPage() {
       if (error) throw error
       
       // Transform data to include brand name
-      const campaignsWithBrandNames = data?.map(campaign => ({
+      const campaignsWithBrandNames = data?.map((campaign: any) => ({
         ...campaign,
         brand_name: campaign.brand_profiles?.company_name || 'Unknown Brand'
       })) || []
