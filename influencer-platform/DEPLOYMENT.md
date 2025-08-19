@@ -1,7 +1,7 @@
 # Deployment Guide for Influencer Platform
 
 ## 🌐 Your Vercel Domain
-**https://influencer-platform-seven.vercel.app**
+**https://ppv-creator.vercel.app**
 
 ## ✅ Optimization Status
 
@@ -85,7 +85,7 @@ Your environment variables (already configured in `.env.production`):
 ```bash
 # Core Settings
 NODE_ENV=production
-NEXT_PUBLIC_APP_URL=https://influencer-platform-seven.vercel.app
+NEXT_PUBLIC_APP_URL=https://ppv-creator.vercel.app
 
 # Supabase (Your existing integration)
 NEXT_PUBLIC_SUPABASE_URL=https://keuvtjwbgqvohqlshryc.supabase.co
@@ -168,8 +168,8 @@ vercel --prod
 - Create initial admin user
 
 ### 2. Verify Deployment
-- Visit https://influencer-platform-seven.vercel.app
-- Check health endpoint: https://influencer-platform-seven.vercel.app/api/health
+- Visit https://ppv-creator.vercel.app
+- Check health endpoint: https://ppv-creator.vercel.app/api/health
 - Test user registration and login
 
 ### 3. Optional Enhancements
@@ -187,9 +187,9 @@ vercel --prod
 
 After deployment, verify these endpoints:
 
-- **Health Check**: https://influencer-platform-seven.vercel.app/api/health
-- **Robots.txt**: https://influencer-platform-seven.vercel.app/robots.txt
-- **Sitemap**: https://influencer-platform-seven.vercel.app/sitemap.xml
+- **Health Check**: https://ppv-creator.vercel.app/api/health
+- **Robots.txt**: https://ppv-creator.vercel.app/robots.txt
+- **Sitemap**: https://ppv-creator.vercel.app/sitemap.xml
 
 ## ⚠️ Known Issues & Solutions
 

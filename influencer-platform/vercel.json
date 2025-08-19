@@ -81,10 +81,10 @@
       "has": [
         {
           "type": "host",
-          "value": "www.influencer-platform-seven.vercel.app"
+          "value": "www.ppv-creator.vercel.app"
         }
       ],
-      "destination": "https://influencer-platform-seven.vercel.app/:path*",
+      "destination": "https://ppv-creator.vercel.app/:path*",
       "permanent": true
     }
   ],

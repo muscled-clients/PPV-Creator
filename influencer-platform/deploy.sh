@@ -4,7 +4,7 @@
 # This script sets up environment variables and deploys to Vercel
 
 echo "🚀 Starting deployment to Vercel..."
-echo "Domain: https://influencer-platform-seven.vercel.app"
+echo "Domain: https://ppv-creator.vercel.app"
 
 # Check if vercel CLI is installed
 if ! command -v vercel &> /dev/null; then
@@ -17,7 +17,7 @@ echo "🔧 Setting up environment variables..."
 
 # Core configuration
 vercel env add NODE_ENV production production
-vercel env add NEXT_PUBLIC_APP_URL https://influencer-platform-seven.vercel.app production
+vercel env add NEXT_PUBLIC_APP_URL https://ppv-creator.vercel.app production
 
 # Supabase configuration (your existing values)
 vercel env add NEXT_PUBLIC_SUPABASE_URL https://keuvtjwbgqvohqlshryc.supabase.co production
@@ -44,10 +44,10 @@ echo "🚀 Deploying to production..."
 vercel --prod
 
 echo "✅ Deployment complete!"
-echo "🌐 Your app is live at: https://influencer-platform-seven.vercel.app"
+echo "🌐 Your app is live at: https://ppv-creator.vercel.app"
 echo ""
 echo "🔍 Next steps:"
-echo "1. Visit https://influencer-platform-seven.vercel.app/api/health to check health"
+echo "1. Visit https://ppv-creator.vercel.app/api/health to check health"
 echo "2. Test the application functionality"
 echo "3. Monitor logs in Vercel dashboard"
 echo ""

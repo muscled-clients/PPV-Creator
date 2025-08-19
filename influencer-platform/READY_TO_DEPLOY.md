@@ -2,7 +2,7 @@
 
 ## Your Influencer Platform - Production Ready
 
-**Live URL**: https://influencer-platform-seven.vercel.app
+**Live URL**: https://ppv-creator.vercel.app
 
 ---
 
@@ -70,11 +70,11 @@ vercel --prod
 
 ## 🔍 After Deployment - Test These
 
-1. **Main App**: https://influencer-platform-seven.vercel.app
-2. **Health Check**: https://influencer-platform-seven.vercel.app/api/health
+1. **Main App**: https://ppv-creator.vercel.app
+2. **Health Check**: https://ppv-creator.vercel.app/api/health
 3. **SEO Files**: 
-   - https://influencer-platform-seven.vercel.app/robots.txt
-   - https://influencer-platform-seven.vercel.app/sitemap.xml
+   - https://ppv-creator.vercel.app/robots.txt
+   - https://ppv-creator.vercel.app/sitemap.xml
 
 ---
 
@@ -82,7 +82,7 @@ vercel --prod
 
 ```bash
 NODE_ENV=production
-NEXT_PUBLIC_APP_URL=https://influencer-platform-seven.vercel.app
+NEXT_PUBLIC_APP_URL=https://ppv-creator.vercel.app
 NEXT_PUBLIC_SUPABASE_URL=https://keuvtjwbgqvohqlshryc.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtldXZ0andiZ3F2b2hxbHNocnljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwODM1MzQsImV4cCI6MjA3MDY1OTUzNH0._ZmNRYvrpPGGTl4SH8t5a0ly_TxlYmnmJcry2fMow8A
 SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtldXZ0andiZ3F2b2hxbHNocnljIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTA4MzUzNCwiZXhwIjoyMDcwNjU5NTM0fQ.MxavmruJ3J20KsWO7sZPGjnjB0YNHTcVew4z2dTcxoc

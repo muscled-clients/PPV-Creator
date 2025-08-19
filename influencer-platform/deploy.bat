@@ -4,7 +4,7 @@ echo ================================
 echo   Influencer Platform Deployment
 echo ================================
 echo.
-echo Domain: https://influencer-platform-seven.vercel.app
+echo Domain: https://ppv-creator.vercel.app
 echo.
 
 REM Check if vercel CLI is installed
@@ -18,7 +18,7 @@ echo Setting up environment variables...
 
 REM Core configuration
 vercel env add NODE_ENV production production
-vercel env add NEXT_PUBLIC_APP_URL https://influencer-platform-seven.vercel.app production
+vercel env add NEXT_PUBLIC_APP_URL https://ppv-creator.vercel.app production
 
 REM Supabase configuration
 vercel env add NEXT_PUBLIC_SUPABASE_URL https://keuvtjwbgqvohqlshryc.supabase.co production
@@ -43,10 +43,10 @@ echo ================================
 echo   Deployment Complete!
 echo ================================
 echo.
-echo Your app is live at: https://influencer-platform-seven.vercel.app
+echo Your app is live at: https://ppv-creator.vercel.app
 echo.
 echo Next steps:
-echo 1. Visit https://influencer-platform-seven.vercel.app/api/health
+echo 1. Visit https://ppv-creator.vercel.app/api/health
 echo 2. Test the application functionality
 echo 3. Check Vercel dashboard for logs
 echo.

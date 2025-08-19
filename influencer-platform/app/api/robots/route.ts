@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
 export async function GET() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://influencer-platform-seven.vercel.app'
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://ppv-creator.vercel.app'
   const isProduction = process.env.NODE_ENV === 'production'
   
   const robotsTxt = isProduction
