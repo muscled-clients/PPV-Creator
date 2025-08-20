@@ -29,7 +29,7 @@ const nextConfig: NextConfig = {
     scrollRestoration: true,
   },
   
-  output: 'standalone',
+  // output: 'standalone',
   
   // Force dynamic rendering for pages with client-side features
   generateBuildId: () => 'production',
