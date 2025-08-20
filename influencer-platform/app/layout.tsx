@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Suspense } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { NavigationProgress } from '@/components/ui/navigation-progress';
+import { AuthProvider } from '@/components/providers/auth-provider';
 import "./globals.css";
 
 const inter = Inter({
@@ -23,11 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="font-sans antialiased">
-        <Suspense fallback={null}>
-          <NavigationProgress />
-        </Suspense>
-        {children}
-        <Toaster 
+        <AuthProvider>
+          <Suspense fallback={null}>
+            <NavigationProgress />
+          </Suspense>
+          {children}
+          <Toaster 
           position="top-right"
           toastOptions={{
             duration: 4000,
@@ -47,6 +49,7 @@ export default function RootLayout({
             },
           }}
         />
+        </AuthProvider>
       </body>
     </html>
   );

@@ -13,6 +13,8 @@ import {
   CheckCircle
 } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 export default async function BrandCampaignsPage() {
   const supabase = await createClient()
   

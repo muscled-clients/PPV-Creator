@@ -30,7 +30,7 @@ export interface Campaign {
   campaign_applications?: Array<{
     id: string
     status: string
-    influencer_id?: string
+    influencer_id: string
   }>
   campaign_view_tracking?: Array<{
     views_tracked: number

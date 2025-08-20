@@ -455,10 +455,16 @@ export interface Database {
       user_role: UserRole
       campaign_status: CampaignStatus
       application_status: ApplicationStatus
-      submission_status: SubmissionStatus
+      submission_status: ApplicationStatus
       transaction_status: TransactionStatus
       payment_method: PaymentMethod
       platform_type: PlatformType
     }
   }
 }
+
+// Type aliases for easier imports
+export type User = Database['public']['Tables']['user_profiles']['Row']
+export type InfluencerProfile = Database['public']['Tables']['influencer_profiles']['Row']
+export type BrandProfile = Database['public']['Tables']['brand_profiles']['Row']
+export type Campaign = Database['public']['Tables']['campaigns']['Row']
