@@ -6,11 +6,11 @@
   "framework": "nextjs",
   
   "functions": {
+    "app/api/**/*.{js,jsx,ts,tsx}": {
+      "maxDuration": 60
+    },
     "app/**/*.{js,jsx,ts,tsx}": {
       "maxDuration": 30
-    },
-    "api/**/*.{js,ts}": {
-      "maxDuration": 60
     }
   },
   
