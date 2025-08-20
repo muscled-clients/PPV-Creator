@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { ApplicationManager } from '@/components/applications/application-manager'
 import { 
   Users,
@@ -166,10 +167,12 @@ export default async function BrandApplicationsPage() {
                 <Clock className="w-5 h-5 text-yellow-600 mr-2" />
                 Pending Applications ({pendingApplications.length})
               </h2>
-              <ApplicationManager 
-                applications={pendingApplications} 
-                userRole="brand" 
-              />
+              <Suspense fallback={<div>Loading applications...</div>}>
+                <ApplicationManager 
+                  applications={pendingApplications} 
+                  userRole="brand" 
+                />
+              </Suspense>
             </div>
           )}
 
@@ -180,10 +183,12 @@ export default async function BrandApplicationsPage() {
                 <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
                 Approved Applications ({approvedApplications.length})
               </h2>
-              <ApplicationManager 
-                applications={approvedApplications} 
-                userRole="brand" 
-              />
+              <Suspense fallback={<div>Loading applications...</div>}>
+                <ApplicationManager 
+                  applications={approvedApplications} 
+                  userRole="brand" 
+                />
+              </Suspense>
             </div>
           )}
 
@@ -194,10 +199,12 @@ export default async function BrandApplicationsPage() {
                 <XCircle className="w-5 h-5 text-red-600 mr-2" />
                 Rejected Applications ({rejectedApplications.length})
               </h2>
-              <ApplicationManager 
-                applications={rejectedApplications} 
-                userRole="brand" 
-              />
+              <Suspense fallback={<div>Loading applications...</div>}>
+                <ApplicationManager 
+                  applications={rejectedApplications} 
+                  userRole="brand" 
+                />
+              </Suspense>
             </div>
           )}
 
