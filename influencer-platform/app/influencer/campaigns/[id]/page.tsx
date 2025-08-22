@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ApplicationFormWrapper } from '@/components/applications/application-form-wrapper'
+import { ApprovedApplicationsShowcase } from '@/components/applications/approved-applications-showcase'
 import { 
   ArrowLeft,
   Calendar,
@@ -14,7 +15,7 @@ import {
   XCircle,
   MapPin,
   FileText,
-  Sparkles
+  User
 } from 'lucide-react'
 
 interface CampaignDetailsPageProps {
@@ -76,6 +77,73 @@ export default async function CampaignDetailsPage({ params, searchParams }: Camp
     .eq('influencer_id', user.id)
     .single()
 
+  // Fetch approved applications for inspiration (excluding current user)
+  const { data: approvedApplications, error: approvedError } = await supabase
+    .from('campaign_applications')
+    .select(`
+      id,
+      message,
+      created_at,
+      influencer_id,
+      status
+    `)
+    .eq('campaign_id', resolvedParams.id)
+    .eq('status', 'approved')
+    .neq('influencer_id', user.id)
+    .limit(5)
+
+  // Fetch influencer profiles and content links for approved applications
+  let enrichedApplications = []
+  if (approvedApplications && approvedApplications.length > 0) {
+    // Get all application IDs
+    const applicationIds = approvedApplications.map(app => app.id)
+    
+    // Use service client with proper configuration to bypass RLS for public showcase
+    const { createClient: createDirectClient } = await import('@supabase/supabase-js')
+    const serviceSupabase = createDirectClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+    
+    const { data: contentLinks, error: linksError } = await serviceSupabase
+      .from('application_content_links')
+      .select('*')
+      .in('application_id', applicationIds)
+      .order('created_at', { ascending: true })
+    
+    if (linksError) {
+      console.error('[Server] Content links error:', linksError)
+    }
+    
+    // Group content links by application
+    const linksByApplication = contentLinks?.reduce((acc, link) => {
+      if (!acc[link.application_id]) {
+        acc[link.application_id] = []
+      }
+      acc[link.application_id].push(link)
+      return acc
+    }, {} as Record<string, typeof contentLinks>) || {}
+    
+    // Enrich applications with influencer profiles and content links
+    enrichedApplications = await Promise.all(
+      approvedApplications.map(async (app) => {
+        const { data: influencerProfile } = await supabase
+          .from('user_profiles')
+          .select('id, full_name, username, avatar_url')
+          .eq('id', app.influencer_id)
+          .single()
+        
+        const links = linksByApplication[app.id] || []
+        return {
+          ...app,
+          influencer: influencerProfile,
+          content_links: links
+        }
+      })
+    )
+  }
+
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       weekday: 'long',
@@ -117,6 +185,7 @@ export default async function CampaignDetailsPage({ params, searchParams }: Camp
           <ApplicationFormWrapper 
             campaign={campaign}
             campaignId={resolvedParams.id}
+            userId={user.id}
           />
         </div>
       </div>
@@ -172,6 +241,14 @@ export default async function CampaignDetailsPage({ params, searchParams }: Camp
               )}
             </div>
           </div>
+        )}
+
+        {/* Approved Applications Showcase */}
+        {enrichedApplications && enrichedApplications.length > 0 && (!existingApplication || existingApplication.status !== 'approved') && (
+          <ApprovedApplicationsShowcase
+            applications={enrichedApplications}
+            campaignTitle={campaign.title}
+          />
         )}
 
         {/* Main Content */}
@@ -234,17 +311,6 @@ export default async function CampaignDetailsPage({ params, searchParams }: Camp
                   Requirements
                 </h2>
                 <p className="text-gray-700 whitespace-pre-wrap">{campaign.requirements}</p>
-              </div>
-            )}
-
-            {/* Deliverables */}
-            {campaign.deliverables && (
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Deliverables
-                </h2>
-                <p className="text-gray-700 whitespace-pre-wrap">{campaign.deliverables}</p>
               </div>
             )}
 
@@ -353,12 +419,24 @@ export default async function CampaignDetailsPage({ params, searchParams }: Camp
               )}
               
               {existingApplication?.status === 'approved' && (
-                <Link
-                  href="/influencer/submissions/create"
-                  className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
-                >
-                  Submit Content
-                </Link>
+                <div className="inline-flex items-center px-6 py-3 bg-green-100 text-green-800 rounded-lg font-medium">
+                  <CheckCircle className="w-5 h-5 mr-2" />
+                  Application Approved
+                </div>
+              )}
+              
+              {existingApplication?.status === 'pending' && (
+                <div className="inline-flex items-center px-6 py-3 bg-yellow-100 text-yellow-800 rounded-lg font-medium">
+                  <Clock className="w-5 h-5 mr-2" />
+                  Under Review
+                </div>
+              )}
+              
+              {existingApplication?.status === 'rejected' && (
+                <div className="inline-flex items-center px-6 py-3 bg-red-100 text-red-800 rounded-lg font-medium">
+                  <XCircle className="w-5 h-5 mr-2" />
+                  Not Selected
+                </div>
               )}
             </div>
           </div>

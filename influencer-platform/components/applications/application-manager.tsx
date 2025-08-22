@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
-import { ApplicationCard } from './application-card'
-import { updateApplication } from '@/lib/actions/application-actions'
+import { ApplicationCardEnhanced } from './application-card-enhanced'
+import { updateApplicationWithLinks } from '@/lib/actions/application-actions-enhanced'
 
 interface ApplicationManagerProps {
   applications: any[]
@@ -16,16 +16,24 @@ export function ApplicationManager({ applications, userRole }: ApplicationManage
   const [isUpdating, setIsUpdating] = useState<string | null>(null)
 
   const handleStatusChange = async (applicationId: string, status: string) => {
+    console.log('[ApplicationManager] handleStatusChange called:', applicationId, status)
+    // Handle deletion separately - just refresh the page
+    if (status === 'deleted') {
+      console.log('[ApplicationManager] Handling deletion - refreshing page')
+      router.refresh()
+      return
+    }
+    
     setIsUpdating(applicationId)
     
     try {
-      const result = await updateApplication(applicationId, { status: status as any })
+      const result = await updateApplicationWithLinks(applicationId, { status: status as any })
       
       if (result.success) {
         toast.success(
           status === 'approved' ? 'Application approved!' :
           status === 'rejected' ? 'Application rejected' :
-          'Application withdrawn'
+          'Application updated'
         )
         router.refresh()
       } else {
@@ -42,7 +50,7 @@ export function ApplicationManager({ applications, userRole }: ApplicationManage
   return (
     <div className="grid grid-cols-1 gap-4">
       {applications.map((application) => (
-        <ApplicationCard
+        <ApplicationCardEnhanced
           key={application.id}
           application={application}
           userRole={userRole}

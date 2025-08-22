@@ -49,7 +49,9 @@ export default async function BrandApplicationsPage() {
         id,
         title,
         budget_amount,
-        brand_id
+        brand_id,
+        payment_model,
+        cpm_rate
       )
     `)
     .in('campaign_id', campaignIds)
@@ -61,11 +63,12 @@ export default async function BrandApplicationsPage() {
   }
   console.log('Applications found:', applications?.length || 0)
 
-  // Get influencer profiles separately if we have applications
+  // Get influencer profiles and content links separately if we have applications
   let enrichedApplications = applications || []
   if (applications && applications.length > 0) {
     // Get unique influencer IDs
     const influencerIds = [...new Set(applications.map(app => app.influencer_id))]
+    const applicationIds = applications.map(app => app.id)
     
     // Fetch user profiles
     const { data: userProfiles } = await supabase
@@ -79,11 +82,29 @@ export default async function BrandApplicationsPage() {
       .select('*')
       .in('user_id', influencerIds)
     
+    // Fetch content links for all applications
+    const { data: contentLinks } = await supabase
+      .from('application_content_links')
+      .select('*')
+      .in('application_id', applicationIds)
+      .order('created_at', { ascending: true })
+    
+    // Group content links by application
+    const linksByApplication = contentLinks?.reduce((acc, link) => {
+      if (!acc[link.application_id]) {
+        acc[link.application_id] = []
+      }
+      acc[link.application_id].push(link)
+      return acc
+    }, {} as Record<string, typeof contentLinks>) || {}
+    
     // Merge the data
     enrichedApplications = applications.map(app => ({
       ...app,
+      influencer: userProfiles?.find(u => u.id === app.influencer_id),
       user_profiles: userProfiles?.find(u => u.id === app.influencer_id),
-      influencer_profiles: influencerProfiles?.find(i => i.user_id === app.influencer_id)
+      influencer_profiles: influencerProfiles?.find(i => i.user_id === app.influencer_id),
+      content_links: linksByApplication[app.id] || []
     }))
   }
 

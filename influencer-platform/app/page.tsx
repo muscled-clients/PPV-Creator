@@ -291,8 +291,8 @@ export default function Home() {
           <div className="text-center">
             <p>&copy; 2024 Influencer Platform. All rights reserved.</p>
             <div className="mt-4 space-x-6">
-              <a href="/terms" className="hover:text-white transition-colors">Terms</a>
-              <a href="/privacy" className="hover:text-white transition-colors">Privacy</a>
+              <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
+              <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
               <a href="/contact" className="hover:text-white transition-colors">Contact</a>
             </div>
           </div>

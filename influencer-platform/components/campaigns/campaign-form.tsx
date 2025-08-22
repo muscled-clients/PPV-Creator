@@ -46,7 +46,6 @@ export function CampaignForm({
     platforms: initialData?.platforms || [],
     categories: initialData?.categories || [],
     target_audience: initialData?.target_audience || '',
-    deliverables: initialData?.deliverables || ''
   })
 
   // Calculate total budget for CPM model
@@ -336,22 +335,6 @@ export function CampaignForm({
             required
             rows={3}
             placeholder="e.g., Minimum 10K followers, Fashion/Lifestyle content, High engagement rate..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-          />
-        </div>
-
-        {/* Deliverables */}
-        <div>
-          <label htmlFor="deliverables" className="block text-sm font-medium text-gray-700 mb-2">
-            Expected Deliverables
-          </label>
-          <textarea
-            id="deliverables"
-            name="deliverables"
-            value={formData.deliverables}
-            onChange={handleInputChange}
-            rows={3}
-            placeholder="e.g., 1 Instagram post, 3 story posts, 1 TikTok video..."
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
         </div>

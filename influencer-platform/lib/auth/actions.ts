@@ -114,35 +114,87 @@ export async function signUp(data: SignUpData) {
 export async function signIn(data: SignInData): Promise<SignInResponse> {
   const supabase = await createClient()
   
-  const { data: authData, error } = await supabase.auth.signInWithPassword({
-    email: data.email,
-    password: data.password
-  })
+  // Retry logic for network errors
+  let retries = 3
+  let lastError: any = null
+  
+  while (retries > 0) {
+    try {
+      const { data: authData, error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password
+      })
 
-  if (error) {
-    console.error('Sign in error:', error)
-    
-    // Handle specific error cases
-    if (error.message === 'Email not confirmed') {
-      return { 
-        error: 'Please check your email and confirm your account before signing in. Check your spam folder if you haven\'t received the confirmation email.',
-        needsConfirmation: true,
-        email: data.email
+      if (error) {
+        console.error('Sign in error:', error)
+        
+        // Handle network errors with retry
+        if (error.message === 'fetch failed' || error.message.includes('ECONNRESET') || error.message.includes('network')) {
+          lastError = error
+          retries--
+          if (retries > 0) {
+            console.log(`Network error, retrying... (${retries} attempts left)`)
+            await new Promise(resolve => setTimeout(resolve, 1000)) // Wait 1 second before retry
+            continue
+          }
+          return { 
+            error: 'Network connection issue. Please check your internet connection and try again.' 
+          }
+        }
+        
+        // Handle specific error cases
+        if (error.message === 'Email not confirmed') {
+          return { 
+            error: 'Please check your email and confirm your account before signing in. Check your spam folder if you haven\'t received the confirmation email.',
+            needsConfirmation: true,
+            email: data.email
+          }
+        }
+        
+        if (error.message.includes('Invalid login credentials')) {
+          return { error: 'Invalid email or password' }
+        }
+        
+        return { error: error.message }
       }
+      
+      // If we get here, authentication was successful
+      if (!authData?.user) {
+        return { error: 'Failed to sign in' }
+      }
+      
+      // Continue with the rest of the function
+      break
+    } catch (error: any) {
+      console.error('Unexpected error during sign in:', error)
+      lastError = error
+      retries--
+      
+      if (retries > 0) {
+        console.log(`Retrying authentication... (${retries} attempts left)`)
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        continue
+      }
+      
+      // If all retries failed
+      if (error.code === 'ECONNRESET' || error.message?.includes('fetch failed')) {
+        return { 
+          error: 'Unable to connect to authentication service. Please check your internet connection and try again.' 
+        }
+      }
+      
+      return { error: 'An unexpected error occurred. Please try again.' }
     }
-    
-    if (error.message.includes('Invalid login credentials')) {
-      return { error: 'Invalid email or password' }
-    }
-    
-    return { error: error.message }
   }
 
-  if (!authData.user) {
-    return { error: 'Failed to sign in' }
-  }
-
+  // This check is now inside the retry loop above
   // Get user profile to determine role and status
+  const { data: authData } = await supabase.auth.getUser()
+  
+  if (!authData?.user) {
+    return { error: 'Failed to authenticate user' }
+  }
+  
   const { data: profile } = await supabase
     .from('user_profiles')
     .select('role, status')

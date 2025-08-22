@@ -466,11 +466,6 @@ export default function CampaignDetailsPage({ params }: PageProps) {
                     </div>
                     
                     <div>
-                      <label className="text-sm font-medium text-gray-500">Deliverables</label>
-                      <p className="mt-1 text-gray-900">{campaign.deliverables || 'No deliverables specified'}</p>
-                    </div>
-                    
-                    <div>
                       <label className="text-sm font-medium text-gray-500">Target Audience</label>
                       <p className="mt-1 text-gray-900">{campaign.target_audience || 'Not specified'}</p>
                     </div>

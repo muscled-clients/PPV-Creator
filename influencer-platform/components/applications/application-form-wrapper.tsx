@@ -1,15 +1,16 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { ApplicationForm } from './application-form'
+import { ApplicationFormEnhanced } from './application-form-enhanced'
 import { Campaign } from '@/lib/types/campaign'
 
 interface ApplicationFormWrapperProps {
   campaign: Campaign
   campaignId: string
+  userId: string
 }
 
-export function ApplicationFormWrapper({ campaign, campaignId }: ApplicationFormWrapperProps) {
+export function ApplicationFormWrapper({ campaign, campaignId, userId }: ApplicationFormWrapperProps) {
   const router = useRouter()
 
   const handleSuccess = () => {
@@ -22,8 +23,9 @@ export function ApplicationFormWrapper({ campaign, campaignId }: ApplicationForm
   }
 
   return (
-    <ApplicationForm 
+    <ApplicationFormEnhanced 
       campaign={campaign}
+      userId={userId}
       onSuccess={handleSuccess}
       onCancel={handleCancel}
     />

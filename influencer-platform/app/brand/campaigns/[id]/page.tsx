@@ -85,13 +85,6 @@ export default async function CampaignDetailPage({ params }: PageProps) {
                   </div>
                 )}
                 
-                {campaign.deliverables && (
-                  <div>
-                    <h3 className="font-medium text-gray-700 mb-1">Deliverables</h3>
-                    <p className="text-gray-600">{campaign.deliverables}</p>
-                  </div>
-                )}
-                
                 {campaign.target_audience && (
                   <div>
                     <h3 className="font-medium text-gray-700 mb-1">Target Audience</h3>

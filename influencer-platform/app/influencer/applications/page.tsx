@@ -43,16 +43,45 @@ export default async function InfluencerApplicationsPage() {
         budget_amount,
         brand_id,
         end_date,
-        status
+        status,
+        payment_model,
+        cpm_rate
       )
     `)
     .eq('influencer_id', user.id)
     .order('created_at', { ascending: false })
+  
+  // Fetch content links for all applications
+  let enrichedApplications = applications || []
+  if (applications && applications.length > 0) {
+    const applicationIds = applications.map(app => app.id)
+    
+    const { data: contentLinks } = await supabase
+      .from('application_content_links')
+      .select('*')
+      .in('application_id', applicationIds)
+      .order('created_at', { ascending: true })
+    
+    // Group content links by application
+    const linksByApplication = contentLinks?.reduce((acc, link) => {
+      if (!acc[link.application_id]) {
+        acc[link.application_id] = []
+      }
+      acc[link.application_id].push(link)
+      return acc
+    }, {} as Record<string, typeof contentLinks>) || {}
+    
+    // Merge the data
+    enrichedApplications = applications.map(app => ({
+      ...app,
+      content_links: linksByApplication[app.id] || []
+    }))
+  }
 
   // Group applications by status
-  const pendingApplications = applications?.filter(app => app.status === 'pending') || []
-  const approvedApplications = applications?.filter(app => app.status === 'approved') || []
-  const rejectedApplications = applications?.filter(app => app.status === 'rejected') || []
+  const pendingApplications = enrichedApplications?.filter(app => app.status === 'pending') || []
+  const approvedApplications = enrichedApplications?.filter(app => app.status === 'approved') || []
+  const rejectedApplications = enrichedApplications?.filter(app => app.status === 'rejected') || []
 
   return (
     <div className="space-y-6">
@@ -78,7 +107,7 @@ export default async function InfluencerApplicationsPage() {
             </div>
             <div className="ml-3">
               <p className="text-xs font-medium text-gray-600">Total</p>
-              <p className="text-xl font-bold text-gray-900">{applications?.length || 0}</p>
+              <p className="text-xl font-bold text-gray-900">{enrichedApplications?.length || 0}</p>
             </div>
           </div>
         </div>
@@ -115,8 +144,8 @@ export default async function InfluencerApplicationsPage() {
             <div className="ml-3">
               <p className="text-xs font-medium text-gray-600">Success Rate</p>
               <p className="text-xl font-bold text-gray-900">
-                {applications && applications.length > 0
-                  ? Math.round((approvedApplications.length / applications.length) * 100)
+                {enrichedApplications && enrichedApplications.length > 0
+                  ? Math.round((approvedApplications.length / enrichedApplications.length) * 100)
                   : 0}%
               </p>
             </div>
@@ -169,7 +198,7 @@ export default async function InfluencerApplicationsPage() {
         )}
 
         {/* Empty State */}
-        {applications?.length === 0 && (
+        {enrichedApplications?.length === 0 && (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
             <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
